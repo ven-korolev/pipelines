@@ -30,6 +30,101 @@ describe("TodoList Component - Extended Tests", () => {
     expect(screen.getAllByRole("listitem").length).toBe(1000);
   }, 120000);
 
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
+
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
+
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
+
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
+
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
+
+  test("adds 1000 tasks and ensures they are all in the document", async () => {
+    render(<TodoList />);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
+
+    addTasks(tasks);
+
+    await waitFor(() => {
+      tasks.forEach((task) => {
+        expect(screen.getByText(task)).toBeInTheDocument();
+      });
+    });
+
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
+  }, 120000);
+
   test("removes 500 tasks after adding 1000", async () => {
     render(<TodoList />);
     const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);

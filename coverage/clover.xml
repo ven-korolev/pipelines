@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739963251834" clover="3.2.0">
-  <project timestamp="1739963251834" name="All files">
+<coverage generated="1739964125147" clover="3.2.0">
+  <project timestamp="1739964125147" name="All files">
     <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="9" coveredmethods="9" elements="30" coveredelements="30" complexity="0" loc="19" ncloc="19" packages="1" files="4" classes="4"/>
     <file name="Button.js" path="/Users/veniaminkorolev/Projects/pipelines/Button.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -18,15 +18,15 @@
     <file name="TodoList.js" path="/Users/veniaminkorolev/Projects/pipelines/TodoList.js">
       <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
       <line num="3" count="6" type="stmt"/>
-      <line num="4" count="37848" type="stmt"/>
-      <line num="5" count="37848" type="stmt"/>
-      <line num="7" count="37848" type="stmt"/>
-      <line num="8" count="24900" type="cond" truecount="2" falsecount="0"/>
-      <line num="9" count="18900" type="stmt"/>
-      <line num="10" count="18900" type="stmt"/>
-      <line num="14" count="37848" type="stmt"/>
-      <line num="16" count="18906" type="stmt"/>
-      <line num="20" count="14310000" type="stmt"/>
+      <line num="4" count="103881" type="stmt"/>
+      <line num="5" count="103881" type="stmt"/>
+      <line num="7" count="103881" type="stmt"/>
+      <line num="8" count="57900" type="cond" truecount="2" falsecount="0"/>
+      <line num="9" count="51900" type="stmt"/>
+      <line num="10" count="51900" type="stmt"/>
+      <line num="14" count="103881" type="stmt"/>
+      <line num="16" count="51906" type="stmt"/>
+      <line num="20" count="47310000" type="stmt"/>
     </file>
     <file name="math.js" path="/Users/veniaminkorolev/Projects/pipelines/math.js">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
