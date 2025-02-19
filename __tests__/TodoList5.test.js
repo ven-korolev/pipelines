@@ -17,7 +17,7 @@ const addTasks = (tasks) => {
 describe("TodoList Component - Extended Tests", () => {
   test("adds 1000 tasks and ensures they are all in the document", async () => {
     render(<TodoList />);
-    const tasks = Array.from({ length: 3000 }, (_, i) => `Task ${i + 1}`);
+    const tasks = Array.from({ length: 1000 }, (_, i) => `Task ${i + 1}`);
 
     addTasks(tasks);
 
@@ -27,7 +27,7 @@ describe("TodoList Component - Extended Tests", () => {
       });
     });
 
-    expect(screen.getAllByRole("listitem").length).toBe(3000);
+    expect(screen.getAllByRole("listitem").length).toBe(1000);
   }, 120000);
 
   test("removes 500 tasks after adding 1000", async () => {
