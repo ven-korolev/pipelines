@@ -10,24 +10,37 @@ jobs:
   test_ubuntu:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_PROJECT_KEY: "your-sonar-project-key"
+      SONAR_ORG: "your-sonar-organization"
 
     steps:
       - name: ⬇️ Checkout repository code
         uses: actions/checkout@v3
 
-      - uses: actions/cache/restore@v3
+      - name: 🏎️ Restore Yarn cache
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-          restore-keys: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --prefer-offline
 
-      - uses: actions/cache/restore@v4
+      - name: 💾 Save Yarn cache
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
+
+      - name: 🔄 Restore Jest cache
+        uses: actions/cache@v3
         id: jest-cache
         with:
           path: "jest-cache"
@@ -37,112 +50,20 @@ jobs:
         id: cpu-cores
         uses: SimenB/github-actions-cpu-cores@v1
 
-      - name: 🧪 Run tests and collect coverage based on HEAD
-        run:
-          yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults
-          --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - name: 🧪 Run tests and collect coverage
+        run: |
+          yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults --max-workers ${{ steps.cpu-cores.outputs.count }}
 
-  test_ubuntu_64:
-    runs-on: ubuntu-22.04-arm
-    env:
-      GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    steps:
-      - name: ⬇️ Checkout repository code
-        uses: actions/checkout@v3
-
-      - uses: actions/cache/restore@v3
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-          restore-keys: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
-
-      - uses: actions/cache/restore@v4
-        id: jest-cache
-        with:
-          path: "jest-cache"
-          key: ${{ runner.os }}-jest
-
-      - name: 🏎️ Get number of CPU cores
-        id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v1
-
-      - name: 🧪 Run tests and collect coverage based on HEAD
-        run:
-          yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults
-          --max-workers ${{ steps.cpu-cores.outputs.count }}
-
-  test_mac_64:
-    runs-on: macos-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    steps:
-      - name: ⬇️ Checkout repository code
-        uses: actions/checkout@v3
-
-      - uses: actions/cache/restore@v3
-        id: yarn-cache
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-          restore-keys: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline
-
-      - uses: actions/cache/restore@v4
-        id: jest-cache
-        with:
-          path: "jest-cache"
-          key: ${{ runner.os }}-jest
-
-      - name: 🏎️ Get number of CPU cores
-        id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v1
-
-      - name: 🧪 Run tests and collect coverage based on HEAD
-        run:
-          yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults
-          --max-workers ${{ steps.cpu-cores.outputs.count }}
-
-  test_mac_13:
-      runs-on: macos-13
-      env:
-        GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      steps:
-        - name: ⬇️ Checkout repository code
-          uses: actions/checkout@v3
-
-        - uses: actions/cache/restore@v3
-          id: yarn-cache
-          with:
-            path: "**/node_modules"
-            key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-            restore-keys: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock','**/*.patch') }}
-
-        - name: Install dependencies
-          if: steps.yarn-cache.outputs.cache-hit != 'true'
-          run: yarn install --frozen-lockfile --prefer-offline
-
-        - uses: actions/cache/restore@v4
-          id: jest-cache
-          with:
-            path: "jest-cache"
-            key: ${{ runner.os }}-jest
-
-        - name: 🏎️ Get number of CPU cores
-          id: cpu-cores
-          uses: SimenB/github-actions-cpu-cores@v1
-
-        - name: 🧪 Run tests and collect coverage based on HEAD
-          run:
-            yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults
-            --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - name: Upload coverage to SonarCloud
+        run: |
+          export SONAR_SCANNER_VERSION=5.0.1.3006
+          curl -o sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip"
+          unzip sonar-scanner.zip
+          mv sonar-scanner-* sonar-scanner
+          ./sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+            -Dsonar.organization=$SONAR_ORG \
+            -Dsonar.sources=src \
+            -Dsonar.host.url="https://sonarcloud.io" \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
