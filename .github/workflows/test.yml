@@ -54,6 +54,18 @@ jobs:
         run: |
           yarn test --silent --ci --coverage --json --outputFile=coverage/report.json --testLocationInResults --max-workers ${{ steps.cpu-cores.outputs.count }}
 
+      - name: 🔍 Debug Environment Variables
+        run: |
+          echo "SONAR_PROJECT_KEY: $SONAR_PROJECT_KEY"
+          echo "SONAR_ORG: $SONAR_ORG"
+          echo "Checking if SONAR_TOKEN is set..."
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "❌ SONAR_TOKEN is NOT set!"
+            exit 1
+          else
+            echo "✅ SONAR_TOKEN is set!"
+          fi
+
       - name: Upload coverage to SonarCloud
         run: |
           export SONAR_SCANNER_VERSION=5.0.1.3006
