@@ -1,6 +1,10 @@
 name: Lint & Test
 
-on: pull_request
+on: 
+  pull_request:
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.head_ref }}-lint-and-test
