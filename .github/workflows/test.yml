@@ -74,7 +74,7 @@ jobs:
       - name: Upload coverage to SonarCloud
         run: |
           export SONAR_SCANNER_VERSION=6.0.0.4432
-          curl -o sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-macosx.zip"
+          curl -o sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
           unzip sonar-scanner.zip
           mv sonar-scanner-* sonar-scanner
           ./sonar-scanner/bin/sonar-scanner \
